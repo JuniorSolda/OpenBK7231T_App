@@ -17,6 +17,17 @@
 #include "drv_spi.h"
 #include "drv_uart.h"
 
+#include "drv_bl0942.h"
+#include "../obk_config.h"
+
+// === ATIVE O MODO TWIN AQUI ===
+#ifndef ENABLE_BL_TWIN
+#define ENABLE_BL_TWIN 1
+#endif
+
+#if ENABLE_DRIVER_BL0942
+
+
 static unsigned short bl0942_baudRate = 4800;
 #if ENABLE_BL_TWIN
 //bl0942_opts - bit0 - UART1, bit1 - UART2
