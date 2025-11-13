@@ -327,9 +327,16 @@ static int SPI_WriteReg(uint8_t reg, uint32_t val) {
 }
 
 static void BL0942_Init(void) {
-  PrevCfCnt[BL0942_DEVICE_INDEX_0] = CF_CNT_INVALID;
+    PrevCfCnt[BL0942_DEVICE_INDEX_0] = CF_CNT_INVALID;
 #if ENABLE_BL_TWIN
-  PrevCfCnt[BL0942_DEVICE_INDEX_1] = CF_CNT_INVALID;
+    PrevCfCnt[BL0942_DEVICE_INDEX_1] = CF_CNT_INVALID;
+
+    // garantir que o comando BL0942opts seja registrado uma única vez
+    static int g_cmdsAdded = 0;
+    if(!g_cmdsAdded){
+        BL0942_AddCommands();  // torna BL0942opts disponível no console
+        g_cmdsAdded = 1;
+    }
 #endif
 
     BL_Shared_Init();
@@ -337,6 +344,7 @@ static void BL0942_Init(void) {
     PwrCal_Init(PWR_CAL_DIVIDE, DEFAULT_VOLTAGE_CAL, DEFAULT_CURRENT_CAL,
                 DEFAULT_POWER_CAL);
 }
+
 
 // THIS IS called by 'startDriver BL0942' command
 // You can set alternate baud with 'startDriver BL0942 9600' syntax
